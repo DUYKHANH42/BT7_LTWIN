@@ -16,11 +16,16 @@ namespace BT7
         private void Form1_Load(object sender, EventArgs e)
         {
             DuLieuSan();
+            TapHopLH();
+            TapHopHV();
+        }
+
+        private void TapHopLH()
+        {
+            cboLop.DataSource = null;
             cboLop.DisplayMember = "TenLopHoc";
             cboLop.ValueMember = "MaLopHoc";
             cboLop.DataSource = lophocs;
-
-
         }
 
         private void DuLieuSan()
@@ -55,9 +60,15 @@ namespace BT7
 
                     hocVienTheoLop.Add(dshocvien);
 
+            TapHopHV();
+        }
+
+        private void TapHopHV()
+        {
+            lstHocVien.DataSource = null;
             lstHocVien.DisplayMember = "TenHV";
             lstHocVien.ValueMember = "MaHV";
-            lstHocVien.DataSource = hocVienTheoLop;
+            lstHocVien.DataSource = hocviens;
         }
 
         private void lstHocVien_SelectedIndexChanged(object sender, EventArgs e)
@@ -105,6 +116,7 @@ namespace BT7
                         return;
                     }
                 }
+                KiemTraTXT();
                 hv = new HocVien();
                 hv.MaLopHoc = cboLop.SelectedValue.ToString();
                 hv.MaHV = txtMaHv.Text;
@@ -118,7 +130,8 @@ namespace BT7
             }
             else
             {
-                hv = (lstHocVien.SelectedItem) as HocVien; 
+                KiemTraTXT();
+                hv = (lstHocVien.SelectedItem) as HocVien;
                 hv.TenHV = txtHoTen.Text;
                 hv.GioiTinh = txtGioiTinh.Text.ToUpper() == "NAM" ? true : false;
                 hv.NgaySinh = DateTime.Parse(txtNgaySinh.Text);
@@ -127,7 +140,46 @@ namespace BT7
             }
             cboLop_SelectedIndexChanged(sender, e);
         }
+        private void KiemTraTXT()
+        {
 
+            if (txtGioiTinh.Text.ToUpper() != "NAM" && txtGioiTinh.Text.ToUpper() != "NỮ")
+            {
+                MessageBox.Show("Giới tính là Nam hoặc Nữ vui lòng nhập lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+            if (txtGioiTinh.Text == "" as string)
+            {
+                MessageBox.Show("Giới tính không được để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+            if (txtNgaySinh.Text == "" as string)
+            {
+                MessageBox.Show("Ngày sinh không được để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+            if (txtHoTen.Text == "")
+            {
+                MessageBox.Show("Tên không được để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+            if (txtMaHv.Text == "")
+            {
+                MessageBox.Show("Mã học viên không được để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+            if (txtDiaChi.Text == "")
+            {
+                MessageBox.Show("Địa chỉ không được để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtGioiTinh.Focus();
+                return;
+            }
+        }
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (lstHocVien.SelectedIndex == -1)
@@ -153,7 +205,7 @@ namespace BT7
                         txtNgaySinh.Clear();
                         txtDiaChi.Clear();
                         txtMaHv.Focus();
-                    }            
+                    }
                 }
                 cboLop_SelectedIndexChanged(sender, e);
             }
